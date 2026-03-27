@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Tournay | Portfolio Dynamique</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <canvas id="network-bg"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <h2 class="logo">Lucas<span>Tournay</span></h2>
+            <ul class="nav-links">
+                <li><a href="#about" class="nav-item">Accueil</a></li>
+                <li><a href="#experience" class="nav-item">Parcours</a></li>
+                <li><a href="#choix-cesi" class="nav-item">Mon Projet</a></li>
+                <li><a href="stage.html" class="nav-item">Stages</a></li> <li><a href="#experience" class="nav-item">Parcours</a></li>
+                <li><a href="certifications.html" class="nav-item">Certifications</a></li>
+                <li><a href="#documents" class="nav-item">Réalisations</a></li>
+                <li><a href="competences.html" class="nav-item">Portefeuille de compétence</a></li>
+                <li><a href="#contact" class="nav-item">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+
+    <header id="about">
+        <div class="hero-wrapper" data-aos="fade-up">
+            <div class="profile-container">
+                <img src="images/photo_lucas.jpg" alt="Lucas Tournay" class="profile-img">
+                <div class="status-badge pulse">Recherche Alternance CESI</div>
+            </div>
+            <div class="intro">
+                <h1 class="glitch" data-text="Tournay Lucas">Tournay Lucas</h1>
+                <p class="subtitle">BTS SIO SISR</p>
+                <p class="description">
+                    Bonjour, je m'appelle <strong>Lucas Tournay</strong>, j'ai 20 ans. Après un <strong>Bac STI2D</strong> option SIN à Fourmies, je me suis spécialisé en informatique.
+                    <br><br>
+                    Actuellement en 2<sup>ème</sup> année de <strong>BTS SIO (SISR)</strong> à Charleville-Mézières, mon objectif est d'intégrer le <strong>CESI de Reims</strong> pour un Bachelor Administrateur Systèmes et Réseaux.
+                </p>
+                <div class="hero-btns">
+                    <a href="cv.html" class="btn-primary" style="text-decoration: none; display: inline-block;">📄 Consulter mon CV</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section" id="experience" data-aos="fade-right">
+            <h2 class="section-title">Mon Parcours</h2>
+            <div class="timeline">
+                <div class="timeline-item" data-aos="fade-left" data-aos-delay="100">
+                    <div class="timeline-dot"></div>
+                    <span class="date">2022 - 2023</span>
+                    <h4>Baccalauréat STI2D - Option SIN (Systèmes d'Information et Numérique)</h4>
+                    <p>Lycée Camille Claudel - Fourmies</p>
+                </div>
+                <div class="timeline-item" data-aos="fade-left" data-aos-delay="200">
+                    <div class="timeline-dot"></div>
+                    <span class="date">2024 - 2026</span>
+                    <h4>BTS SIO option SISR</h4>
+                    <p>Lycée Gaspard Monge - Charleville-Mézières.</p>
+                </div>
+                <div class="timeline-item highlight" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="timeline-dot"></div>
+                    <span class="date">2026 (Objectif)</span>
+                    <h4>Bachelor Administrateur Systèmes et Réseaux</h4>
+                    <p>CESI Reims - Formation en alternance.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="choix-cesi" data-aos="flip-up">
+            <h2 class="section-title">Projet futur</h2>
+            <div class="project-grid">
+                <div class="project-card cesi-special hover-float">
+                    <div class="project-img-container">
+                        <img src="images/CESI-logo.jpg" alt="Logo CESI" class="project-real-img">
+                    </div>
+                    <h4>CESI de REIMS Bachelor Administrateur Systèmes et réseaux</h4>
+                    <p>
+                        Passionné par l'informatique et plus particulièrement par la gestion de parc et les réseaux, 
+                        mon ambition est d'intégrer ce Bachelor en alternance. Ce cursus me permettra de transformer mes 
+                        acquis en BTS SIO SISR en une expertise professionnelle concrète.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="certifications" data-aos="fade-up">
+            <h2 class="section-title">Mes Certifications</h2>
+            <div class="project-grid">
+                <div class="project-card hover-glow">
+                    <div class="project-img-container">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg" alt="Cisco Logo" class="project-real-img">
+                    </div>
+                    <h4>Cisco Certified Support Technician (CCST) Cybersecurity</h4>
+                    <p>Validation des compétences en sécurité réseau, surveillance des menaces et principes de cyberdéfense.</p>
+                </div>
+
+                <div class="project-card hover-glow">
+                    <div class="project-img-container">
+                        <img src="./images/Mooc-logo.jpg" alt="ANSSI Logo" class="project-real-img">
+                    </div>
+                    <h4>SecNumacadémie (ANSSI)</h4>
+                    <p>MOOC complet sur la cybersécurité : sécurité du poste de travail, authentification, et sécurité sur Internet.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="documents">
+            <h2 class="section-title">Réalisations Techniques</h2>
+            <div class="project-grid">
+                <div class="project-card hover-glow" data-aos="fade-up">
+                    <div class="project-img-container">
+                        <img src="images/pfsense-logo.jpg" alt="Logo pfSense" class="project-real-img">
+                    </div>
+                    <h4>pfSense & Segmentation</h4>
+                    <p>Installation sur Hyper-V et configuration réseau sécurisée.</p>
+                    <a href="docs/Compte%20rendu%20TL.pdf" target="_blank" class="project-link">Voir le dossier →</a>
+                </div>
+
+                <div class="project-card hover-glow" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-img-container">
+                        <img src="images/wireguard-logo.jpg" alt="Logo WireGuard" class="project-real-img">
+                    </div>
+                    <h4>Tunneling VPN</h4>
+                    <p>Mise en place de solutions d'accès distants sécurisés via WireGuard.</p>
+                    <a href="docs/Compte%20rendu%20VPN%20TL.pdf" target="_blank" class="project-link">Voir le dossier →</a>
+                </div>
+
+                <div class="project-card hover-glow" data-aos="fade-up" data-aos-delay="200">
+                    <div class="project-img-container">
+                        <img src="images/AD-logo.jpg" alt="Logo Active Directory" class="project-real-img">
+                    </div>
+                    <h4>Active Directory</h4>
+                    <p>Gestion des rôles, des utilisateurs et des stratégies GPO.</p>
+                    <a href="docs/Compte%20rendu%20TP%20AD.pdf" target="_blank" class="project-link">Voir le dossier →</a>
+                </div>
+
+                <div class="project-card hover-glow" data-aos="fade-up" data-aos-delay="300">
+                    <div class="project-img-container">
+                        <img src="images/DNS-logo.jpg" alt="Logo DNS" class="project-real-img">
+                    </div>
+                    <h4>Infrastructure DNS</h4>
+                    <p>Configuration et résolution de noms de domaines.</p>
+                    <a href="docs/Compte%20rendu%20DNS%20TL%20PDF.pdf" target="_blank" class="project-link">Voir le dossier →</a>
+                </div>
+
+                <div class="project-card hover-glow" data-aos="fade-up" data-aos-delay="400">
+                    <div class="project-img-container">
+                        <img src="images/Zabbix-logo.jpg" alt="Logo Zabbix" class="project-real-img">
+                    </div>
+                    <h4>Supervision Zabbix</h4>
+                    <p>Monitoring en temps réel des serveurs et équipements réseau.</p>
+                    <a href="docs/compte%20rendu%20Zabbix%20TL.pdf" target="_blank" class="project-link">Voir le dossier →</a>
+                </div>
+
+                <div class="project-card hover-glow" data-aos="fade-up" data-aos-delay="500">
+                    <div class="project-img-container">
+                        <img src="images/Mail-logo.jpg" alt="Logo Serveur Mail" class="project-real-img">
+                    </div>
+                    <h4>Serveur Mail</h4>
+                    <p>Déploiement et configuration d'une solution de messagerie.</p>
+                    <a href="docs/TP%20MAIL%20Tournay%20Lucas.pdf" target="_blank" class="project-link">Voir le dossier →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section class="section" id="contact" data-aos="fade-up">
+        <h2 class="section-title">Contact</h2>
+        <div class="contact-wrapper">
+            <div class="contact-headline">
+                <h4>Lucas Tournay — En recherche d'alternance</h4>
+            </div>
+            
+            <div class="contact-details">
+                <div class="contact-item">
+                    <span class="icon">📞</span>
+                    <p><strong>Téléphone :</strong> <a href="tel:+33788371217">07 88 37 12 17</a></p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">✉️</span>
+                    <p><strong>Mail :</strong> <a href="mailto:lucas.tournay59@gmail.com">lucas.tournay59@gmail.com</a></p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📍</span>
+                    <p><strong>Adresse :</strong> 1ter rue de Rocquigny, 59610 Féron</p>
+                </div>
+            </div>
+
+            <div class="contact-social">
+                <h1>Me contacter :</h1>
+                <a href="https://www.linkedin.com/in/lucas-tournay-2a69162ba/" class="social-link linkedin-link" target="_blank">
+                    <img src="images/linkedin-logo-linkedin-icon-transparent-free-png.webp" alt="LinkedIn" class="social-icon">
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=100072894137629&locale=fr_FR" class="social-link facebook-link" target="_blank">
+                    <img src="images/Facebook-logo.jpg" alt="Facebook" class="social-icon">
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-simple">
+        <div class="footer-content">
+            <p>© 2026 Lucas Tournay. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <div class="popup" id="popup" onclick="closePopup()">
+        <div class="popup-box scale-in" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closePopup()">&times;</button>
+            <iframe src="docs/CV Alternance bts sio.jpg"></iframe>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // Canvas Network Background
+        const canvas = document.getElementById("network-bg");
+        const ctx = canvas.getContext("2d");
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+
+        let nodes = [];
+        for (let i = 0; i < 70; i++) {
+            nodes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.6,
+                vy: (Math.random() - 0.5) * 0.6
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            nodes.forEach((node, i) => {
+                node.x += node.vx; node.y += node.vy;
+                if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+                if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+                ctx.beginPath(); ctx.arc(node.x, node.y, 2, 0, Math.PI * 2); ctx.fillStyle = "rgba(56, 189, 248, 0.5)"; ctx.fill();
+                for (let j = i + 1; j < nodes.length; j++) {
+                    let dx = node.x - nodes[j].x, dy = node.y - nodes[j].y, dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist/150})`; ctx.lineWidth = 0.5; ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        function openPopup() { document.getElementById("popup").style.display = "flex"; }
+        function closePopup() { document.getElementById("popup").style.display = "none"; }
+    </script>
+</body>
+</html>

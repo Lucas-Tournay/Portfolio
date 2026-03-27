@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Tournay | Tableau de Synthèse</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Optimisation pour l'affichage direct et fluide de l'image */
+        .image-display-wrapper {
+            margin-top: 30px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .competence-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            /* Pour s'assurer que l'image ne dépasse pas sur mobile */
+            display: block; 
+        }
+
+        /* Ajustement de la description pour le thème */
+        .description-theme {
+            max-width: 800px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="network-bg"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <h2 class="logo">Lucas<span>Tournay</span></h2>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-item">Retour Accueil</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section" data-aos="fade-up">
+            <h2 class="section-title">Tableau de Synthèse</h2>
+            <p class="description-theme">
+                Voici mon tableau de synthèse officiel des réalisations professionnelles pour la session BTS SIO 2026.
+            </p>
+
+            <div class="image-display-wrapper">
+                <img src="./images/competencetableau.jpg" alt="Tableau de synthèse des réalisations de Lucas Tournay" class="competence-img">
+            </div>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // Script du fond animé (Network Background) - Identique à ton accueil
+        const canvas = document.getElementById("network-bg");
+        const ctx = canvas.getContext("2d");
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+
+        let nodes = [];
+        for (let i = 0; i < 70; i++) {
+            nodes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.6,
+                vy: (Math.random() - 0.5) * 0.6
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            nodes.forEach((node, i) => {
+                node.x += node.vx; node.y += node.vy;
+                if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+                if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+                ctx.beginPath(); ctx.arc(node.x, node.y, 2, 0, Math.PI * 2); ctx.fillStyle = "rgba(56, 189, 248, 0.5)"; ctx.fill();
+                for (let j = i + 1; j < nodes.length; j++) {
+                    let dx = node.x - nodes[j].x, dy = node.y - nodes[j].y, dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist/150})`; ctx.lineWidth = 0.5; ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

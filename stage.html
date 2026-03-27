@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Tournay | Expériences en Stage</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        .stage-header {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .map-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 25px 0;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        /* Optionnel : Rend la carte un peu plus sombre pour coller au thème */
+        .map-container iframe {
+            filter: grayscale(10%) contrast(90%);
+        }
+
+        .company-info {
+            margin-top: 25px;
+            line-height: 1.8;
+            color: #94a3b8;
+        }
+
+        .expertise-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .expertise-list li {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+            font-size: 0.9rem;
+            color: #e2e8f0;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 60px auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+
+        .container-stage {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+        }
+
+        .left { left: 0; }
+        .right { left: 50%; }
+
+        .content-stage {
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .content-stage:hover {
+            transform: scale(1.02);
+            border-color: var(--primary);
+        }
+
+        .year-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--primary);
+            color: #0f172a;
+            border-radius: 20px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .mission-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .mission-list li {
+            color: #94a3b8;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .mission-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        @media screen and (max-width: 768px) {
+            .timeline::after { left: 31px; }
+            .container-stage { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .right { left: 0%; }
+            .expertise-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="network-bg"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <h2 class="logo">Lucas<span>Tournay</span></h2>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-item">Retour Accueil</a></li>
+                <li><a href="competences.html" class="nav-item">Compétences</a></li>
+                <li><a href="certifications.html" class="nav-item">Certifications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="section">
+        <div class="stage-header" data-aos="fade-down">
+            <h2 class="section-title">Expérience Professionnelle</h2>
+            <h3 style="color: var(--primary); font-size: 1.8rem;">SI Avesnois Lab</h3>
+            <p style="color: var(--accent); font-weight: 700;">📍 49 Rue Georges Clemenceau, 59132 Trélon</p>
+            
+            <div class="company-info">
+                <p>
+                    <strong>SI Avesnois Lab</strong> est une Entreprise de Services du Numérique (ESN) au statut de <strong>SCOP SARL</strong>. Située à Trélon, au cœur de l'Avesnois, elle se spécialise dans l'accompagnement technologique des collectivités et des entreprises locales.
+                </p>
+            </div>
+
+            <div class="map-container">
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.4774932403893!2d4.0884783765571795!3d50.05861867152004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c274f5bf9e31c1%3A0xe80272bcdde4e3ff!2sSI%20Avesnois%20Lab!5e0!3m2!1sfr!2sfr!4v1774608364060!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+            <ul class="expertise-list">
+                <li><strong>Cybersécurité</strong> (Audits & Pare-feu)</li>
+                <li><strong>Supervision</strong> (Monitoring réseau)</li>
+                <li><strong>Solutions ERP</strong> (Partenaire Odoo)</li>
+                <li><strong>Vidéoprotection IP</strong></li>
+                <li><strong>Affichage Dynamique</strong></li>
+            </ul>
+        </div>
+
+        <div class="timeline">
+            <div class="container-stage left" data-aos="fade-right">
+                <div class="content-stage">
+                    <span class="year-badge">2024 - 1ère Année</span>
+                    <h4 style="color: white; margin-bottom: 10px;">Sécurisation & Infrastructure</h4>
+                    <ul class="mission-list">
+                        <li>Configuration de pare-feu <strong>pfSense</strong></li>
+                        <li>Authentification forte via <strong>Yubikey</strong> (MFA)</li>
+                        <li>Gestion Radius et filtrage MAC sur environnement <strong>UniFi</strong></li>
+                        <li>Déploiement du SIEM <strong>UTMStack</strong></li>
+                        <li>Maintenance de proximité chez les clients</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="container-stage right" data-aos="fade-left">
+                <div class="content-stage">
+                    <span class="year-badge">2025 - 2ème Année</span>
+                    <h4 style="color: white; margin-bottom: 10px;">Automatisation & Déploiement</h4>
+                    <ul class="mission-list">
+                        <li>Analyse comparative des solutions de déploiement</li>
+                        <li>Mise en œuvre de la solution Open Source <strong>OPSI</strong></li>
+                        <li>Automatisation de l'installation des postes de travail</li>
+                        <li>Configuration et télédistribution d'agents</li>
+                        <li>Rédaction de procédures techniques d'exploitation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="docs/oral%20pro%20Tournay%20Lucas.pdf" target="_blank" class="btn-primary" style="text-decoration: none;">📄 Voir le rapport complet (PDF)</a>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        const canvas = document.getElementById("network-bg");
+        const ctx = canvas.getContext("2d");
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+
+        let nodes = [];
+        for (let i = 0; i < 70; i++) {
+            nodes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.6,
+                vy: (Math.random() - 0.5) * 0.6
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            nodes.forEach((node, i) => {
+                node.x += node.vx; node.y += node.vy;
+                if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+                if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+                ctx.beginPath(); ctx.arc(node.x, node.y, 2, 0, Math.PI * 2); ctx.fillStyle = "rgba(56, 189, 248, 0.5)"; ctx.fill();
+                for (let j = i + 1; j < nodes.length; j++) {
+                    let dx = node.x - nodes[j].x, dy = node.y - nodes[j].y, dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist/150})`; ctx.lineWidth = 0.5; ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

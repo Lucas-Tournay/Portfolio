@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Tournay | Certifications</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Styles spécifiques pour l'affichage des certifications */
+        .certif-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .certif-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .certif-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .certif-logo-wrapper {
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .certif-img {
+            max-height: 100%;
+            max-width: 200px;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+        }
+
+        .certif-title {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .certif-desc {
+            color: #94a3b8;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .badge-status {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 6px 15px;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="network-bg"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <h2 class="logo">Lucas<span>Tournay</span></h2>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-item">Retour Accueil</a></li>
+                <li><a href="competences.html" class="nav-item">Tableau de Synthèse</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section" data-aos="fade-up">
+            <h2 class="section-title">Mes Certifications</h2>
+            <p style="color: #94a3b8; max-width: 800px;">
+                Retrouvez ici les certifications professionnelles et académiques obtenues durant mon parcours en cybersécurité et administration réseau.
+            </p>
+
+            <div class="certif-container">
+                <div class="certif-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="certif-logo-wrapper">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg" alt="Logo Cisco" class="certif-img">
+                    </div>
+                    <h3 class="certif-title">CyberOps Associate</h3>
+                    <p class="certif-desc">
+                        La certification CyberOps Associate (examen 200-201 CBROPS) se concentre sur le travail quotidien au sein d'un SOC (Security Operations Center),comment gérer, répondre a un incident technique.
+                    </p>
+                    <span class="badge-status">Certificat</span>
+                </div>
+
+                <div class="certif-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="certif-logo-wrapper">
+                        <img src="./images/Mooc-logo.jpg" alt="" class="certif-img">
+                    </div>
+                    <h3 class="certif-title">MOOC de l'ANSSI</h3>
+                    <p class="certif-desc">
+                       Proposée par SecNumacadémie, Formation approfondie sur la sécurité numérique : authentification, sécurité du poste de travail et navigation sécurisée.
+                    </p>
+                    <span class="badge-status">Certificat</span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 60px;">
+                <a href="index.html#contact" class="btn-primary" style="text-decoration: none;">Me contacter</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // Script du fond animé (Network Background)
+        const canvas = document.getElementById("network-bg");
+        const ctx = canvas.getContext("2d");
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+
+        let nodes = [];
+        for (let i = 0; i < 70; i++) {
+            nodes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.6,
+                vy: (Math.random() - 0.5) * 0.6
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            nodes.forEach((node, i) => {
+                node.x += node.vx; node.y += node.vy;
+                if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+                if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+                ctx.beginPath(); ctx.arc(node.x, node.y, 2, 0, Math.PI * 2); ctx.fillStyle = "rgba(56, 189, 248, 0.5)"; ctx.fill();
+                for (let j = i + 1; j < nodes.length; j++) {
+                    let dx = node.x - nodes[j].x, dy = node.y - nodes[j].y, dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist/150})`; ctx.lineWidth = 0.5; ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
