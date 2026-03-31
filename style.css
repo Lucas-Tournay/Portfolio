@@ -177,7 +177,7 @@ header {
 /* --- LOGOS & IMAGES DANS LES CARTES --- */
 .project-img-container {
     width: 100%;
-    height: 80px;
+    height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -342,4 +342,14 @@ header {
 
 .facebook-link:hover .social-icon {
     filter: drop-shadow(0 0 25px rgba(24, 119, 242, 0.85));
+}
+
+.text-left {
+    width: 100%;
+    margin: 5px;
+    text-align: left;
+}
+
+.underline {
+    text-decoration: underline;
 }
