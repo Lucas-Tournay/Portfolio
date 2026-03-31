@@ -343,3 +343,12 @@ header {
 .facebook-link:hover .social-icon {
     filter: drop-shadow(0 0 25px rgba(24, 119, 242, 0.85));
 }
+/* --- ALIGNEMENT SPECIFIQUE GAUCHE --- */
+.project-card.align-left {
+    align-items: flex-start; /* Aligne les éléments flex à gauche */
+    text-align: left;        /* Aligne le texte à gauche */
+}
+
+.project-card.align-left .project-img-container {
+    justify-content: flex-start; /* Aligne le logo à gauche */
+}
