@@ -1,109 +1,212 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Tournay | Tableau de Synthèse</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
     <style>
-        /* Optimisation pour l'affichage direct et fluide de l'image */
-        .image-display-wrapper {
-            margin-top: 30px;
+        :root {
+            --bg: #060d19;
+            --primary: #fbbf24;
+            --accent: #f472b6;
+            --card-bg: rgba(14, 26, 50, 0.85);
+            --border: rgba(251, 191, 36, 0.15);
+            --text: #e2e8f0;
+            --muted: #64748b;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; min-height: 100vh; }
+        #network-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.025; pointer-events: none; z-index: 1;
+        }
+        main, nav, header, section, footer { position: relative; z-index: 2; }
+
+        /* NAVBAR */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; background: rgba(6,13,25,0.75); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: white; }
+        .logo span { color: var(--primary); }
+        .nav-links { list-style: none; display: flex; gap: 6px; }
+        .nav-item { font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 6px 14px; border-radius: 8px; border: 1px solid transparent; transition: all 0.25s; }
+        .nav-item:hover { color: var(--primary); border-color: var(--border); background: rgba(251,191,36,0.06); }
+
+        /* HERO */
+        .hero { min-height: 42vh; display: flex; align-items: center; justify-content: center; padding: 130px 40px 50px; text-align: center; }
+        .hero-inner { max-width: 700px; }
+        .hero-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--primary); background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); padding: 6px 16px; border-radius: 100px; margin-bottom: 22px; opacity: 0; animation: fadeSlideUp 0.7s 0.1s ease forwards; }
+        .hero-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); animation: pulse 2s ease infinite; }
+        .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -0.04em; color: white; margin-bottom: 16px; opacity: 0; animation: fadeSlideUp 0.7s 0.2s ease forwards; }
+        .hero h1 span { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { font-size: 0.97rem; line-height: 1.75; color: #94a3b8; max-width: 580px; margin: 0 auto; opacity: 0; animation: fadeSlideUp 0.7s 0.3s ease forwards; }
+
+        /* SECTION */
+        .section { max-width: 1100px; margin: 0 auto; padding: 0 40px 100px; }
+
+        /* INFO ROW */
+        .info-row {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 50px;
+        }
+        .info-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+            padding: 24px 20px; display: flex; align-items: center; gap: 16px;
+            backdrop-filter: blur(16px); transition: all 0.3s;
+        }
+        .info-card:hover { border-color: rgba(251,191,36,0.35); transform: translateY(-3px); }
+        .info-icon { width: 42px; height: 42px; border-radius: 12px; background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+        .info-text {}
+        .info-label { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+        .info-value { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: white; }
+
+        /* IMAGE CARD */
+        .image-card {
             background: var(--card-bg);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 25px;
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            transition: all 0.35s;
+        }
+        .image-card:hover {
+            border-color: rgba(251,191,36,0.35);
+            box-shadow: 0 28px 56px rgba(0,0,0,0.45), 0 0 36px rgba(251,191,36,0.06);
         }
 
-        .competence-img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-            /* Pour s'assurer que l'image ne dépasse pas sur mobile */
-            display: block; 
+        .image-card-header {
+            padding: 22px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between; gap: 20px;
+            flex-wrap: wrap;
         }
+        .image-card-meta { display: flex; align-items: center; gap: 14px; }
+        .image-card-icon { width: 40px; height: 40px; border-radius: 11px; background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .image-card-label { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+        .image-card-name { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; color: white; }
 
-        /* Ajustement de la description pour le thème */
-        .description-theme {
-            max-width: 800px;
-            color: #94a3b8;
-            margin-bottom: 20px;
+        .session-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary); background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); padding: 5px 14px; border-radius: 100px; }
+
+        .image-wrapper { padding: 24px; display: flex; justify-content: center; }
+        .competence-img { max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); display: block; }
+
+        /* FOOTER */
+        .footer { border-top: 1px solid var(--border); padding: 28px 40px; max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 0.8rem; }
+        .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem; color: white; }
+        .footer-logo span { color: var(--primary); }
+
+        /* ANIMATIONS */
+        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.7); } }
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 700px) {
+            .navbar { padding: 14px 20px; }
+            .nav-links { display: none; }
+            .hero, .section { padding-left: 20px; padding-right: 20px; }
+            .info-row { grid-template-columns: 1fr; }
+            .footer { flex-direction: column; gap: 8px; text-align: center; }
         }
     </style>
 </head>
-
 <body>
-
     <canvas id="network-bg"></canvas>
 
     <nav class="navbar">
-        <div class="nav-container">
-            <h2 class="logo">Lucas<span>Tournay</span></h2>
-            <ul class="nav-links">
-                <li><a href="index.html" class="nav-item">Retour Accueil</a></li>
-            </ul>
-        </div>
+        <h2 class="logo">Lucas<span>Tournay</span></h2>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-item">Accueil</a></li>
+            <li><a href="stage.html" class="nav-item">Stages</a></li>
+            <li><a href="certifications.html" class="nav-item">Certifications</a></li>
+        </ul>
     </nav>
 
-    <main>
-        <section class="section" data-aos="fade-up">
-            <h2 class="section-title">Tableau de Synthèse</h2>
-            <p class="description-theme">
-                Voici mon tableau de synthèse officiel des réalisations professionnelles pour la session BTS SIO 2026.
-            </p>
+    <header class="hero">
+        <div class="hero-inner">
+            <div class="hero-label">BTS SIO — Session 2026</div>
+            <h1>Tableau de <span>Synthèse</span></h1>
+            <p>Mon tableau officiel de synthèse des réalisations professionnelles pour la session BTS SIO 2026.</p>
+        </div>
+    </header>
 
-            <div class="image-display-wrapper">
-                <img src="./images/competencetableau.jpg" alt="Tableau de synthèse des réalisations de Lucas Tournay" class="competence-img">
+    <main>
+        <section class="section">
+            <div class="info-row reveal">
+                <div class="info-card">
+                    <div class="info-icon">🎓</div>
+                    <div class="info-text">
+                        <div class="info-label">Formation</div>
+                        <div class="info-value">BTS SIO SISR</div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📅</div>
+                    <div class="info-text">
+                        <div class="info-label">Session</div>
+                        <div class="info-value">2024 — 2026</div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🏫</div>
+                    <div class="info-text">
+                        <div class="info-label">Établissement</div>
+                        <div class="info-value">Lycée Gaspard Monge</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="image-card reveal">
+                <div class="image-card-header">
+                    <div class="image-card-meta">
+                        <div class="image-card-icon">📋</div>
+                        <div>
+                            <div class="image-card-label">Document officiel</div>
+                            <div class="image-card-name">Tableau de synthèse — Lucas Tournay</div>
+                        </div>
+                    </div>
+                    <div class="session-badge">Session 2026</div>
+                </div>
+                <div class="image-wrapper">
+                    <img src="./images/competencetableau.jpg" alt="Tableau de synthèse des réalisations de Lucas Tournay" class="competence-img">
+                </div>
             </div>
         </section>
     </main>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ duration: 1000, once: true });
+    <footer class="footer">
+        <div class="footer-logo">Lucas<span>Tournay</span></div>
+        <div>BTS SIO SISR — Session 2026</div>
+    </footer>
 
-        // Script du fond animé (Network Background) - Identique à ton accueil
+    <script>
         const canvas = document.getElementById("network-bg");
         const ctx = canvas.getContext("2d");
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.onresize = resize; resize();
-
-        let nodes = [];
-        for (let i = 0; i < 70; i++) {
-            nodes.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.6,
-                vy: (Math.random() - 0.5) * 0.6
-            });
-        }
-
+        const nodes = [];
+        for (let i = 0; i < 80; i++) nodes.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5, r: Math.random()*1.5+1 });
         function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            nodes.forEach((node, i) => {
-                node.x += node.vx; node.y += node.vy;
-                if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
-                if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
-                ctx.beginPath(); ctx.arc(node.x, node.y, 2, 0, Math.PI * 2); ctx.fillStyle = "rgba(56, 189, 248, 0.5)"; ctx.fill();
-                for (let j = i + 1; j < nodes.length; j++) {
-                    let dx = node.x - nodes[j].x, dy = node.y - nodes[j].y, dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 150) {
-                        ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(nodes[j].x, nodes[j].y);
-                        ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist/150})`; ctx.lineWidth = 0.5; ctx.stroke();
-                    }
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            nodes.forEach((n,i) => {
+                n.x+=n.vx; n.y+=n.vy;
+                if(n.x<0||n.x>canvas.width) n.vx*=-1;
+                if(n.y<0||n.y>canvas.height) n.vy*=-1;
+                ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+                ctx.fillStyle="rgba(251,191,36,0.35)"; ctx.fill();
+                for(let j=i+1;j<nodes.length;j++){
+                    const dx=n.x-nodes[j].x, dy=n.y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
+                    if(d<140){ ctx.beginPath(); ctx.moveTo(n.x,n.y); ctx.lineTo(nodes[j].x,nodes[j].y);
+                    ctx.strokeStyle=`rgba(251,191,36,${(1-d/140)*0.18})`; ctx.lineWidth=0.8; ctx.stroke(); }
                 }
             });
             requestAnimationFrame(animate);
         }
         animate();
+        const reveals = document.querySelectorAll('.reveal');
+        const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.08});
+        reveals.forEach(el => obs.observe(el));
     </script>
 </body>
 </html>
