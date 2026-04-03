@@ -5,168 +5,790 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Tournay | Expériences en Stage</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
     <style>
-        .stage-header {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+        :root {
+            --bg: #060d19;
+            --bg2: #0a1628;
+            --primary: #fbbf24;
+            --accent: #f472b6;
+            --gold: #fbbf24;
+            --card-bg: rgba(14, 26, 50, 0.85);
+            --border: rgba(251, 191, 36, 0.15);
+            --text: #e2e8f0;
+            --muted: #64748b;
         }
 
-        /* Conteneur de la carte corrigé */
-        .map-container {
-            width: 100%;
-            height: 350px;
-            border-radius: 15px;
-            overflow: hidden;
-            margin: 25px 0;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            background: #1e293b;
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-            filter: grayscale(10%) contrast(90%);
+        /* ─── CANVAS BG ─────────────────────────────── */
+        #network-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
         }
 
-        .company-info {
-            margin-top: 25px;
-            line-height: 1.8;
-            color: #94a3b8;
-        }
-
-        .expertise-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 25px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .expertise-list li {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 10px 15px;
-            border-radius: 10px;
-            border-left: 3px solid var(--primary);
-            font-size: 0.9rem;
-            color: #e2e8f0;
-        }
-
-        .timeline {
-            position: relative;
-            max-width: 1000px;
-            margin: 60px auto;
-        }
-
-        .timeline::after {
+        /* ─── NOISE OVERLAY ─────────────────────────── */
+        body::before {
             content: '';
-            position: absolute;
-            width: 2px;
-            background: var(--primary);
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            margin-left: -1px;
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .container-stage {
-            padding: 10px 40px;
-            position: relative;
-            width: 50%;
-        }
+        main, nav { position: relative; z-index: 2; }
 
-        .left { left: 0; }
-        .right { left: 50%; }
-
-        .content-stage {
-            padding: 30px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        .content-stage:hover {
-            transform: scale(1.02);
-            border-color: var(--primary);
-        }
-
-        .year-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            background: var(--primary);
-            color: #0f172a;
-            border-radius: 20px;
-            font-weight: 800;
-            margin-bottom: 15px;
-        }
-
-        .mission-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 15px;
-        }
-
-        .mission-list li {
-            color: #94a3b8;
-            margin-bottom: 10px;
-            padding-left: 20px;
-            position: relative;
-            font-size: 0.95rem;
-        }
-
-        .mission-list li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-        }
-
-        /* Boutons pour les documents */
-        .docs-section {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 40px;
-            padding-bottom: 60px;
-        }
-
-        .btn-doc {
+        /* ─── NAVBAR ────────────────────────────────── */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 18px 40px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 12px 20px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
+            justify-content: space-between;
+            background: rgba(6, 13, 25, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
         }
 
-        .btn-doc:hover {
-            background: var(--accent);
-            color: #000;
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+            color: white;
+        }
+
+        .logo span { color: var(--primary); }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-item {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 400;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 7px 16px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: all 0.25s;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            border-color: var(--border);
+            background: rgba(251,191,36,0.06);
+        }
+
+        /* ─── HERO SECTION ──────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 40px 80px;
+            text-align: center;
+        }
+
+        .hero-inner {
+            max-width: 860px;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--primary);
+            background: rgba(251,191,36,0.08);
+            border: 1px solid rgba(251,191,36,0.2);
+            padding: 6px 16px;
+            border-radius: 100px;
+            margin-bottom: 30px;
+            animation: fadeSlideUp 0.8s ease both;
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.0;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.8s 0.1s ease both;
+        }
+
+        .hero h1 .line { display: block; }
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: #94a3b8;
+            max-width: 620px;
+            margin: 0 auto 40px;
+            animation: fadeSlideUp 0.8s 0.2s ease both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeSlideUp 0.8s 0.3s ease both;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--primary), #d97706);
+            color: #0a1628;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            padding: 13px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(251,191,36,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(251,191,36,0.5);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 400;
+            font-size: 0.9rem;
+            padding: 13px 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
             transform: translateY(-3px);
         }
 
-        @media screen and (max-width: 768px) {
-            .timeline::after { left: 31px; }
-            .container-stage { width: 100%; padding-left: 70px; padding-right: 25px; }
-            .right { left: 0%; }
-            .expertise-list { grid-template-columns: 1fr; }
-            .docs-section { flex-direction: column; align-items: center; }
+        /* ─── SCROLL INDICATOR ──────────────────────── */
+        .scroll-hint {
+            position: absolute;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            animation: fadeSlideUp 1s 0.8s ease both;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--primary), transparent);
+            animation: scrollLine 2s ease infinite;
+        }
+
+        @keyframes scrollLine {
+            0% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            51% { transform: scaleY(1); transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        /* ─── COMPANY SECTION ───────────────────────── */
+        .section {
+            padding: 100px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-eyebrow {
+            font-size: 0.75rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 14px;
+            font-weight: 400;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        /* ─── COMPANY CARD ──────────────────────────── */
+        .company-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            margin-bottom: 80px;
+        }
+
+        .company-card-header {
+            padding: 50px 50px 40px;
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .company-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(251,191,36,0.1);
+            border: 1px solid rgba(251,191,36,0.25);
+            color: var(--gold);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 500;
+            padding: 5px 14px;
+            border-radius: 100px;
+            margin-bottom: 16px;
+        }
+
+        .company-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.03em;
+            margin-bottom: 10px;
+        }
+
+        .company-address {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .company-address::before {
+            content: '◎';
+            font-size: 0.8rem;
+        }
+
+        .company-stat {
+            text-align: right;
+        }
+
+        .stat-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .company-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .company-text {
+            padding: 40px 50px;
+            border-right: 1px solid var(--border);
+        }
+
+        .company-text p {
+            color: #94a3b8;
+            line-height: 1.85;
+            font-size: 0.97rem;
+            margin-bottom: 30px;
+        }
+
+        .company-text strong { color: var(--text); font-weight: 500; }
+
+        .expertise-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .expertise-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            transition: all 0.25s;
+        }
+
+        .expertise-pill:hover {
+            border-color: var(--primary);
+            background: rgba(251,191,36,0.05);
+            transform: translateX(4px);
+        }
+
+        .pill-icon {
+            width: 34px; height: 34px;
+            border-radius: 9px;
+            background: rgba(251,191,36,0.1);
+            border: 1px solid rgba(251,191,36,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .pill-text {
+            font-size: 0.9rem;
+            color: var(--text);
+            font-weight: 400;
+        }
+
+        .pill-sub {
+            font-size: 0.75rem;
+            color: var(--muted);
+            display: block;
+            margin-top: 1px;
+        }
+
+        .company-map {
+            padding: 40px 50px;
+        }
+
+        .map-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .map-wrapper {
+            width: 100%;
+            height: 260px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .map-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            filter: grayscale(30%) contrast(85%) brightness(0.8);
+        }
+
+        /* ─── TIMELINE ──────────────────────────────── */
+        .timeline-section {
+            padding: 0 40px 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline-header {
+            margin-bottom: 60px;
+        }
+
+        .years-track {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 60px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0;
+        }
+
+        .year-tab {
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--muted);
+            padding-bottom: 16px;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: -0.01em;
+        }
+
+        .year-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .experiences-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .exp-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(16px);
+        }
+
+        .exp-card:hover {
+            border-color: rgba(251,191,36,0.4);
+            transform: translateY(-6px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 40px rgba(251,191,36,0.06);
+        }
+
+        .exp-card-head {
+            padding: 32px 32px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .exp-year-chip {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #0a1628;
+            background: linear-gradient(135deg, var(--primary), #d97706);
+            padding: 5px 14px;
+            border-radius: 100px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .exp-card-head-right { flex: 1; }
+
+        .exp-domain {
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .exp-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .exp-body { padding: 28px 32px 32px; }
+
+        .exp-intro {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 22px;
+            font-style: italic;
+        }
+
+        .missions-title {
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .mission-item {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .mission-item:last-child { border-bottom: none; }
+
+        .mission-dot {
+            width: 22px; height: 22px;
+            border-radius: 6px;
+            background: rgba(251,191,36,0.1);
+            border: 1px solid rgba(251,191,36,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .mission-content { flex: 1; }
+        .mission-name {
+            font-size: 0.9rem;
+            color: var(--text);
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .mission-name strong { color: var(--primary); font-weight: 500; }
+
+        .mission-tag {
+            display: inline-block;
+            font-size: 0.67rem;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.07);
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-top: 5px;
+        }
+
+        /* ─── SKILLS HIGHLIGHT BAR ───────────────────── */
+        .skills-bar {
+            background: linear-gradient(135deg, rgba(251,191,36,0.06), rgba(244,114,182,0.04));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px 40px;
+            margin: 0 40px 80px;
+            max-width: 1120px;
+            margin-left: auto;
+            margin-right: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .skill-item {
+            text-align: center;
+            padding: 20px 10px;
+            border-right: 1px solid var(--border);
+        }
+
+        .skill-item:last-child { border-right: none; }
+
+        .skill-icon { font-size: 1.6rem; margin-bottom: 12px; display: block; }
+
+        .skill-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+            letter-spacing: -0.01em;
+        }
+
+        .skill-desc { font-size: 0.75rem; color: var(--muted); }
+
+        /* ─── DOCS SECTION ──────────────────────────── */
+        .docs-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px 120px;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .doc-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: all 0.3s;
+        }
+
+        .doc-card:hover {
+            border-color: rgba(251,191,36,0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .doc-icon {
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .doc-icon.blue { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.2); }
+        .doc-icon.pink { background: rgba(244,114,182,0.12); border: 1px solid rgba(244,114,182,0.2); }
+        .doc-icon.gold { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.2); }
+
+        .doc-info { flex: 1; }
+
+        .doc-type {
+            font-size: 0.67rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .doc-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.01em;
+        }
+
+        .doc-arrow {
+            color: var(--muted);
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .doc-card:hover .doc-arrow { color: var(--primary); transform: translateX(4px); }
+
+        /* ─── FOOTER LINE ───────────────────────────── */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 30px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .footer-logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .footer-logo span { color: var(--primary); }
+
+        /* ─── ANIMATIONS ────────────────────────────── */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── RESPONSIVE ────────────────────────────── */
+        @media (max-width: 900px) {
+            .company-card-header { grid-template-columns: 1fr; }
+            .company-stat { text-align: left; }
+            .company-body { grid-template-columns: 1fr; }
+            .company-text { border-right: none; border-bottom: 1px solid var(--border); }
+            .experiences-grid { grid-template-columns: 1fr; }
+            .skills-bar { grid-template-columns: 1fr 1fr; }
+            .docs-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .navbar { padding: 16px 20px; }
+            .nav-links { display: none; }
+            .section, .timeline-section, .docs-section { padding-left: 20px; padding-right: 20px; }
+            .skills-bar { margin-left: 20px; margin-right: 20px; grid-template-columns: 1fr 1fr; }
+            .hero { padding: 100px 20px 60px; }
+            .company-card-header, .company-text, .company-map { padding: 28px 24px; }
+            .exp-card-head, .exp-body { padding: 22px 22px; }
         }
     </style>
 </head>
@@ -175,128 +797,372 @@
     <canvas id="network-bg"></canvas>
 
     <nav class="navbar">
-        <div class="nav-container">
-            <h2 class="logo">Lucas<span>Tournay</span></h2>
-            <ul class="nav-links">
-                <li><a href="index.html" class="nav-item">Retour Accueil</a></li>
-                <li><a href="competences.html" class="nav-item">Compétences</a></li>
-                <li><a href="certifications.html" class="nav-item">Certifications</a></li>
-            </ul>
-        </div>
+        <h2 class="logo">Lucas<span>Tournay</span></h2>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-item">Accueil</a></li>
+            <li><a href="competences.html" class="nav-item">Compétences</a></li>
+            <li><a href="certifications.html" class="nav-item">Certifications</a></li>
+        </ul>
     </nav>
 
-    <main class="section">
-        <div class="stage-header" data-aos="fade-down">
-            <h2 class="section-title">Expérience Professionnelle</h2>
-            <h3 style="color: var(--primary); font-size: 1.8rem;">SI Avesnois Lab</h3>
-            <p style="color: var(--accent); font-weight: 700;">📍 49 Rue Georges Clemenceau, 59132 Trélon</p>
-            
-            <div class="company-info">
-                <p>
-                    <strong>SI Avesnois Lab</strong> est une Entreprise de Services du Numérique (ESN) au statut de <strong>SCOP SARL</strong>. Située à Trélon, au cœur de l'Avesnois, elle se spécialise dans l'accompagnement technologique des collectivités et des entreprises locales.
-                </p>
+    <!-- ─── HERO ─────────────────────────────────────────── -->
+    <section class="hero" style="position:relative;">
+        <div class="hero-inner">
+            <div class="hero-label">Expériences Professionnelles</div>
+            <h1>
+                <span class="line">Deux années</span>
+                <span class="line highlight">au cœur du terrain</span>
+            </h1>
+            <p class="hero-desc">
+                Immersion complète dans une ESN spécialisée en cybersécurité et infrastructure réseau, au service des collectivités du territoire de l'Avesnois.
+            </p>
+            <div class="hero-cta">
+                <a href="#company" class="btn-primary">
+                    Découvrir l'entreprise <span>↓</span>
+                </a>
+                <a href="./docs/oral pro Tournay Lucas.pdf" target="_blank" class="btn-secondary">
+                    Rapport complet ↗
+                </a>
             </div>
-
-            <div class="map-container">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.47730936763!2d4.088478376485349!3d50.058622115498956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c274f5bf9e31c1%3A0xe80272bcdde4e3ff!2sSI%20Avesnois%20Lab!5e0!3m2!1sfr!2sfr!4v1774956265503!5m2!1sfr!2sfr" 
-    width="600" 
-    height="450" 
-    style="border:0;" 
-    allowfullscreen="" 
-    loading="lazy" 
-    referrerpolicy="no-referrer-when-downgrade"></iframe>
-</div>
-
-            <ul class="expertise-list">
-                <li><strong>Cybersécurité</strong> (Audits & Pare-feu)</li>
-                <li><strong>Supervision</strong> (Monitoring réseau)</li>
-                <li><strong>Solutions ERP</strong> (Partenaire Odoo)</li>
-                <li><strong>Vidéoprotection IP</strong></li>
-                <li><strong>Affichage Dynamique</strong></li>
-            </ul>
         </div>
+        <div class="scroll-hint">
+            <div class="scroll-line"></div>
+            Scroll
+        </div>
+    </section>
 
-        <div class="timeline">
-            <div class="container-stage left" data-aos="fade-right">
-                <div class="content-stage">
-                    <span class="year-badge">2024 - 1ère Année</span>
-                    <h4 style="color: white; margin-bottom: 10px;">Sécurisation & Infrastructure</h4>
-                    <ul class="mission-list">
-                        <li>Configuration de pare-feu <strong>pfSense</strong></li>
-                        <li>Authentification forte via <strong>Yubikey</strong> (MFA)</li>
-                        <li>Gestion Radius et filtrage MAC sur environnement <strong>UniFi</strong></li>
-                        <li>Déploiement du SIEM <strong>UTMStack</strong></li>
-                        <li>Maintenance de proximité chez les clients</li>
-                    </ul>
+    <!-- ─── COMPANY CARD ──────────────────────────────────── -->
+    <section class="section" id="company">
+        <div class="company-card reveal">
+            <div class="company-card-header">
+                <div>
+                    <div class="company-badge">🏢 SCOP SARL — ESN</div>
+                    <div class="company-name">SI Avesnois Lab</div>
+                    <div class="company-address">49 Rue Georges Clemenceau, 59132 Trélon</div>
+                </div>
+                <div class="company-stat">
+                    <div class="stat-number">2 ans</div>
+                    <div class="stat-label">de stage effectués</div>
                 </div>
             </div>
 
-            <div class="container-stage right" data-aos="fade-left">
-                <div class="content-stage">
-                    <span class="year-badge">2025 - 2ème Année</span>
-                    <h4 style="color: white; margin-bottom: 10px;">Automatisation & Déploiement</h4>
-                    <ul class="mission-list">
-                        <li>Analyse comparative des solutions de déploiement</li>
-                        <li>Mise en œuvre de la solution Open Source <strong>OPSI</strong></li>
-                        <li>Automatisation de l'installation des postes de travail</li>
-                        <li>Configuration et télédistribution d'agents</li>
-                        <li>Rédaction de procédures techniques d'exploitation</li>
-                    </ul>
+            <div class="company-body">
+                <div class="company-text">
+                    <p>
+                        <strong>SI Avesnois Lab</strong> est une Entreprise de Services du Numérique (ESN) au statut coopératif <strong>SCOP SARL</strong>. Ancrée à Trélon, au cœur de l'Avesnois, elle accompagne les <strong>collectivités locales et entreprises du territoire</strong> dans leur transformation numérique.
+                    </p>
+                    <p>
+                        Sa force réside dans une approche de proximité et une expertise pointue alliant <strong>cybersécurité</strong>, <strong>supervision réseau</strong> et intégration de solutions <strong>ERP open source</strong>. Un environnement idéal pour confronter la théorie à des cas réels et complexes.
+                    </p>
+
+                    <div class="expertise-grid">
+                        <div class="expertise-pill">
+                            <div class="pill-icon">🔒</div>
+                            <div>
+                                <span class="pill-text">Cybersécurité</span>
+                                <span class="pill-sub">Audits & Pare-feu pfSense</span>
+                            </div>
+                        </div>
+                        <div class="expertise-pill">
+                            <div class="pill-icon">📡</div>
+                            <div>
+                                <span class="pill-text">Supervision réseau</span>
+                                <span class="pill-sub">Monitoring & alerting</span>
+                            </div>
+                        </div>
+                        <div class="expertise-pill">
+                            <div class="pill-icon">🗄️</div>
+                            <div>
+                                <span class="pill-text">Solutions ERP</span>
+                                <span class="pill-sub">Partenaire Odoo</span>
+                            </div>
+                        </div>
+                        <div class="expertise-pill">
+                            <div class="pill-icon">📹</div>
+                            <div>
+                                <span class="pill-text">Vidéoprotection IP</span>
+                                <span class="pill-sub">Infrastructure & déploiement</span>
+                            </div>
+                        </div>
+                        <div class="expertise-pill">
+                            <div class="pill-icon">🖥️</div>
+                            <div>
+                                <span class="pill-text">Affichage Dynamique</span>
+                                <span class="pill-sub">Solutions d'affichage</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="company-map">
+                    <div class="map-label">Localisation — Trélon, Avesnois</div>
+                    <div class="map-wrapper">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.47730936763!2d4.088478376485349!3d50.058622115498956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c274f5bf9e31c1%3A0xe80272bcdde4e3ff!2sSI%20Avesnois%20Lab!5e0!3m2!1sfr!2sfr!4v1774956265503!5m2!1sfr!2sfr"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <div style="display:flex; gap:16px; margin-top:20px; flex-wrap:wrap;">
+                        <div style="flex:1; min-width:100px; background:rgba(251,191,36,0.06); border:1px solid rgba(251,191,36,0.15); border-radius:12px; padding:16px; text-align:center;">
+                            <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; color:var(--primary);">ESN</div>
+                            <div style="font-size:0.72rem; color:var(--muted); margin-top:3px;">Statut</div>
+                        </div>
+                        <div style="flex:1; min-width:100px; background:rgba(244,114,182,0.06); border:1px solid rgba(244,114,182,0.15); border-radius:12px; padding:16px; text-align:center;">
+                            <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; color:var(--accent);">SCOP</div>
+                            <div style="font-size:0.72rem; color:var(--muted); margin-top:3px;">Forme juridique</div>
+                        </div>
+                        <div style="flex:1; min-width:100px; background:rgba(251,191,36,0.06); border:1px solid rgba(251,191,36,0.15); border-radius:12px; padding:16px; text-align:center;">
+                            <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; color:var(--gold);">59</div>
+                            <div style="font-size:0.72rem; color:var(--muted); margin-top:3px;">Nord (Dept.)</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="docs-section" data-aos="fade-up">
-            <a href="docs/attestation-de-stage1.pdf" target="_blank" class="btn-doc">
-                Attestation Stage 1er Année
+    <!-- ─── SKILLS HIGHLIGHT ──────────────────────────────── -->
+    <div class="skills-bar reveal">
+        <div class="skill-item">
+            <span class="skill-icon">🛡️</span>
+            <div class="skill-name">pfSense</div>
+            <div class="skill-desc">Pare-feu & routage</div>
+        </div>
+        <div class="skill-item">
+            <span class="skill-icon">🔑</span>
+            <div class="skill-name">YubiKey / MFA</div>
+            <div class="skill-desc">Auth. forte</div>
+        </div>
+        <div class="skill-item">
+            <span class="skill-icon">📊</span>
+            <div class="skill-name">UTMStack / SIEM</div>
+            <div class="skill-desc">Détection & logs</div>
+        </div>
+        <div class="skill-item">
+            <span class="skill-icon">🚀</span>
+            <div class="skill-name">OPSI</div>
+            <div class="skill-desc">Déploiement auto</div>
+        </div>
+    </div>
+
+    <!-- ─── TIMELINE ──────────────────────────────────────── -->
+    <section class="timeline-section" id="timeline">
+        <div class="timeline-header reveal">
+            <div class="section-eyebrow">Parcours chronologique</div>
+            <h2 class="section-title">Mes missions de stage</h2>
+        </div>
+
+        <div class="experiences-grid">
+
+            <!-- ANNÉE 1 -->
+            <div class="exp-card reveal">
+                <div class="exp-card-head">
+                    <div class="exp-year-chip">2024</div>
+                    <div class="exp-card-head-right">
+                        <div class="exp-domain">1ère Année — BTS SIO</div>
+                        <div class="exp-title">Sécurisation & Infrastructure</div>
+                    </div>
+                </div>
+                <div class="exp-body">
+                    <p class="exp-intro">Première immersion dans un environnement professionnel axé sur la sécurité réseau et le support de proximité auprès des clients de l'ESN.</p>
+                    <div class="missions-title">Missions réalisées</div>
+
+                    <div class="mission-item">
+                        <div class="mission-dot">01</div>
+                        <div class="mission-content">
+                            <div class="mission-name">Configuration de pare-feu <strong>pfSense</strong></div>
+                            <span class="mission-tag">Réseau</span>
+                        </div>
+                    </div>
+                    <div class="mission-item">
+                        <div class="mission-dot">02</div>
+                        <div class="mission-content">
+                            <div class="mission-name">Authentification forte via <strong>YubiKey</strong> (MFA)</div>
+                            <span class="mission-tag">Sécurité</span>
+                        </div>
+                    </div>
+                    <div class="mission-item">
+                        <div class="mission-dot">03</div>
+                        <div class="mission-content">
+                            <div class="mission-name">Gestion <strong>Radius</strong> et filtrage MAC sur <strong>UniFi</strong></div>
+                            <span class="mission-tag">Wi-Fi & AAA</span>
+                        </div>
+                    </div>
+                    <div class="mission-item">
+                        <div class="mission-dot">04</div>
+                        <div class="mission-content">
+                            <div class="mission-name">Déploiement du SIEM <strong>UTMStack</strong></div>
+                            <span class="mission-tag">Supervision</span>
+                        </div>
+                    </div>
+                    <div class="mission-item">
+                        <div class="mission-dot">05</div>
+                        <div class="mission-content">
+                            <div class="mission-name">Maintenance et support de proximité chez les clients</div>
+                            <span class="mission-tag">Support terrain</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANNÉE 2 -->
+            <div class="exp-card reveal">
+                <div class="exp-card-head">
+                    <div class="exp-year-chip" style="background: linear-gradient(135deg, var(--accent), #e11d88);">2025</div>
+                    <div class="exp-card-head-right">
+                        <div class="exp-domain" style="color: var(--accent);">2ème Année — BTS SIO</div>
+                        <div class="exp-title">Automatisation & Déploiement</div>
+                    </div>
+                </div>
+                <div class="exp-body">
+                    <p class="exp-intro">Montée en compétences sur les outils de déploiement automatisé et industrialisation des processus d'installation des postes de travail.</p>
+                    <div class="missions-title">Missions réalisées</div>
+
+                    <div class="mission-item">
+                        <div class="mission-dot" style="background:rgba(244,114,182,0.1); border-color:rgba(244,114,182,0.2); color:var(--accent);">01</div>
+                        <div class="mission-content">
+                            <div class="mission-name">Analyse comparative des solutions de déploiement</div>
+                            <span class="mission-tag">Veille technologique</span>
+                        </div>
+                    </div>
+                    <div class="mission-item">
+                        <div class="mission-dot" style="background:rgba(244,114,182,0.1); border-color:rgba(244,114,182,0.2); color:var(--accent);">02</div>
+                        <div class="mission-content">
+                            <div class="mission-name">Mise en œuvre de la solution Open Source <strong>OPSI</strong></div>
+                            <span class="mission-tag">Déploiement</span>
+                        </div>
+                    </div>
+                    <div class="mission-item">
+                        <div class="mission-dot" style="background:rgba(244,114,182,0.1); border-color:rgba(244,114,182,0.2); color:var(--accent);">03</div>
+                        <div class="mission-content">
+                            <div class="mission-name">Automatisation de l'installation des postes de travail</div>
+                            <span class="mission-tag">Scripting</span>
+                        </div>
+                    </div>
+                    <div class="mission-item">
+                        <div class="mission-dot" style="background:rgba(244,114,182,0.1); border-color:rgba(244,114,182,0.2); color:var(--accent);">04</div>
+                        <div class="mission-content">
+                            <div class="mission-name">Configuration et télédistribution d'agents</div>
+                            <span class="mission-tag">Administration</span>
+                        </div>
+                    </div>
+                    <div class="mission-item">
+                        <div class="mission-dot" style="background:rgba(244,114,182,0.1); border-color:rgba(244,114,182,0.2); color:var(--accent);">05</div>
+                        <div class="mission-content">
+                            <div class="mission-name">Rédaction de procédures techniques d'exploitation</div>
+                            <span class="mission-tag">Documentation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ─── DOCS ──────────────────────────────────────────── -->
+    <section class="docs-section" id="docs">
+        <div class="reveal">
+            <div class="section-eyebrow">Documents officiels</div>
+            <h2 class="section-title">Télécharger les pièces</h2>
+        </div>
+        <div class="docs-grid reveal">
+            <a href="./docs/attestation-de-stage1.pdf" target="_blank" class="doc-card">
+                <div class="doc-icon blue">📄</div>
+                <div class="doc-info">
+                    <div class="doc-type">Attestation</div>
+                    <div class="doc-name">Stage 1ère Année</div>
+                </div>
+                <div class="doc-arrow">→</div>
             </a>
-            <a href="docs/attestation-de-stage2.pdf" target="_blank" class="btn-doc">
-                Attestation Stage 2eme Année
+            <a href="./docs/attestation-de-stage2.pdf" target="_blank" class="doc-card">
+                <div class="doc-icon pink">📄</div>
+                <div class="doc-info">
+                    <div class="doc-type">Attestation</div>
+                    <div class="doc-name">Stage 2ème Année</div>
+                </div>
+                <div class="doc-arrow">→</div>
             </a>
-            <a href="docs/oral pro Tournay Lucas.pdf" target="_blank" class="btn-primary" style="text-decoration: none;">
-                Voir le rapport de stage complet
+            <a href="./docs/oral pro Tournay Lucas.pdf" target="_blank" class="doc-card" style="border-color: rgba(251,191,36,0.3);">
+                <div class="doc-icon gold">📋</div>
+                <div class="doc-info">
+                    <div class="doc-type">Rapport complet</div>
+                    <div class="doc-name">Oral professionnel</div>
+                </div>
+                <div class="doc-arrow">→</div>
             </a>
         </div>
-    </main>
+    </section>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- ─── FOOTER ────────────────────────────────────────── -->
+    <footer class="footer">
+        <div class="footer-logo">Lucas<span>Tournay</span></div>
+        <div>BTS SIO — SI Avesnois Lab — 2024/2025</div>
+    </footer>
+
     <script>
-        AOS.init({ duration: 1000, once: true });
-
-        // Script du fond animé Network
+        // ─── CANVAS NETWORK ──────────────────────────────
         const canvas = document.getElementById("network-bg");
         const ctx = canvas.getContext("2d");
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.onresize = resize; resize();
 
-        let nodes = [];
-        for (let i = 0; i < 70; i++) {
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.onresize = resize;
+        resize();
+
+        const nodes = [];
+        for (let i = 0; i < 80; i++) {
             nodes.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.6,
-                vy: (Math.random() - 0.5) * 0.6
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                r: Math.random() * 1.5 + 1
             });
         }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             nodes.forEach((node, i) => {
-                node.x += node.vx; node.y += node.vy;
+                node.x += node.vx;
+                node.y += node.vy;
                 if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
                 if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
-                ctx.beginPath(); ctx.arc(node.x, node.y, 2, 0, Math.PI * 2); ctx.fillStyle = "rgba(56, 189, 248, 0.5)"; ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(251, 191, 36, 0.35)";
+                ctx.fill();
+
                 for (let j = i + 1; j < nodes.length; j++) {
-                    let dx = node.x - nodes[j].x, dy = node.y - nodes[j].y, dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 150) {
-                        ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(nodes[j].x, nodes[j].y);
-                        ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist/150})`; ctx.lineWidth = 0.5; ctx.stroke();
+                    const dx = node.x - nodes[j].x;
+                    const dy = node.y - nodes[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 140) {
+                        ctx.beginPath();
+                        ctx.moveTo(node.x, node.y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(251, 191, 36, ${(1 - dist / 140) * 0.18})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
                     }
                 }
             });
             requestAnimationFrame(animate);
         }
         animate();
+
+        // ─── SCROLL REVEAL ───────────────────────────────
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transitionDelay = `${(Array.from(reveals).indexOf(entry.target) % 3) * 0.08}s`;
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
