@@ -4,257 +4,1274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucas Tournay | Portfolio Dynamique</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <title>Lucas Tournay | Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #060d19;
+            --bg2: #0a1628;
+            --primary: #fbbf24;
+            --accent: #f472b6;
+            --gold: #f472b6;
+            --card-bg: rgba(14, 26, 50, 0.85);
+            --border: rgba(251, 191, 36, 0.15);
+            --text: #e2e8f0;
+            --muted: #64748b;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #network-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        main, nav, header, section, footer { position: relative; z-index: 2; }
+
+        /* ─── NAVBAR ─────────────────────────────────── */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(6, 13, 25, 0.75);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+            color: white;
+        }
+        .logo span { color: var(--primary); }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .nav-item {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 400;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 6px 13px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: all 0.25s;
+        }
+        .nav-item:hover {
+            color: var(--primary);
+            border-color: var(--border);
+            background: rgba(251,191,36,0.06);
+        }
+
+        /* ─── HERO ───────────────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 40px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 80px;
+        }
+
+        .hero-left { flex: 1; }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--primary);
+            background: rgba(251,191,36,0.08);
+            border: 1px solid rgba(251,191,36,0.2);
+            padding: 6px 16px;
+            border-radius: 100px;
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s 0.1s ease forwards;
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(3rem, 6vw, 5.2rem);
+            font-weight: 800;
+            line-height: 1.0;
+            letter-spacing: -0.04em;
+            margin-bottom: 6px;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s 0.2s ease forwards;
+        }
+
+        .hero h1 .name-first { color: white; display: block; }
+        .hero h1 .name-last {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .hero-subtitle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0 28px;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s 0.3s ease forwards;
+        }
+
+        .hero-subtitle-text {
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.04em;
+        }
+
+        .hero-divider {
+            width: 30px; height: 1px;
+            background: var(--muted);
+        }
+
+        .hero-subtitle-sub {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #94a3b8;
+            max-width: 540px;
+            margin-bottom: 36px;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s 0.4s ease forwards;
+        }
+
+        .hero-desc strong { color: var(--text); font-weight: 500; }
+
+        .hero-btns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s 0.5s ease forwards;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--primary), #d97706);
+            color: #0a1628;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: 0.88rem;
+            letter-spacing: 0.02em;
+            padding: 12px 26px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(251,191,36,0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(251,191,36,0.45);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 400;
+            font-size: 0.88rem;
+            padding: 12px 26px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* ─── HERO RIGHT — PROFILE ────────────────────── */
+        .hero-right {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeSlideUp 0.9s 0.3s ease forwards;
+        }
+
+        .profile-frame {
+            position: relative;
+            width: 240px;
+        }
+
+        .profile-ring {
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(251,191,36,0.25);
+            animation: rotateSlow 12s linear infinite;
+        }
+
+        .profile-ring::before {
+            content: '';
+            position: absolute;
+            width: 10px; height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            top: 50%;
+            left: -5px;
+            margin-top: -5px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        @keyframes rotateSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .profile-img {
+            width: 240px; height: 240px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center top;
+            border: 3px solid rgba(251,191,36,0.3);
+            display: block;
+        }
+
+        .profile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(251,191,36,0.1);
+            border: 1px solid rgba(251,191,36,0.3);
+            color: var(--gold);
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 100px;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .badge-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--gold);
+            animation: pulse 2s ease infinite;
+        }
+
+        /* ─── QUICK STATS ─────────────────────────────── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px 100px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            text-align: center;
+            backdrop-filter: blur(16px);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(251,191,36,0.35);
+            transform: translateY(-4px);
+        }
+
+        .stat-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        /* ─── SECTIONS ────────────────────────────────── */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px 100px;
+        }
+
+        .section-eyebrow {
+            font-size: 0.75rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 14px;
+            font-weight: 400;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        /* ─── TIMELINE ─────────────────────────────────── */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 8px; bottom: 8px;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--primary), transparent);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 0 0 40px 40px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 8px;
+            width: 11px; height: 11px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .timeline-item.highlight::before {
+            background: var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .timeline-item:hover::before {
+            transform: scale(1.4);
+        }
+
+        .timeline-date {
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .timeline-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px 28px;
+            backdrop-filter: blur(16px);
+            transition: all 0.3s;
+        }
+
+        .timeline-item.highlight .timeline-card {
+            border-color: rgba(251,191,36,0.3);
+            background: linear-gradient(135deg, rgba(251,191,36,0.07), rgba(244,114,182,0.04));
+        }
+
+        .timeline-card:hover {
+            border-color: rgba(251,191,36,0.4);
+            transform: translateX(6px);
+        }
+
+        .timeline-card h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .timeline-card p {
+            font-size: 0.88rem;
+            color: var(--muted);
+        }
+
+        .timeline-card .highlight-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gold);
+            background: rgba(251,191,36,0.1);
+            border: 1px solid rgba(251,191,36,0.2);
+            padding: 3px 10px;
+            border-radius: 100px;
+            margin-top: 10px;
+        }
+
+        /* ─── PROJET CESI ──────────────────────────────── */
+        .project-card-large {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            transition: all 0.35s;
+        }
+
+        .project-card-large:hover {
+            border-color: rgba(251,191,36,0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .project-img-panel {
+            background: rgba(255,255,255,0.02);
+            border-right: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .project-img-panel img {
+            max-width: 100%;
+            max-height: 120px;
+            object-fit: contain;
+            filter: brightness(0.9);
+        }
+
+        .project-content {
+            padding: 40px;
+        }
+
+        .project-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary);
+            background: rgba(251,191,36,0.08);
+            border: 1px solid rgba(251,191,36,0.2);
+            padding: 4px 12px;
+            border-radius: 100px;
+            margin-bottom: 16px;
+        }
+
+        .project-content h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .project-content p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        /* ─── CERTIFICATIONS ──────────────────────────── */
+        .certs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .cert-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 32px;
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            backdrop-filter: blur(16px);
+            transition: all 0.3s;
+        }
+
+        .cert-card:hover {
+            border-color: rgba(251,191,36,0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .cert-logo {
+            width: 60px; height: 60px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            flex-shrink: 0;
+        }
+
+        .cert-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .cert-body { flex: 1; }
+
+        .cert-issuer {
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .cert-body h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .cert-body p {
+            font-size: 0.84rem;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        /* ─── RÉALISATIONS ────────────────────────────── */
+        .realizations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .realization-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .realization-card:hover {
+            border-color: rgba(251,191,36,0.4);
+            transform: translateY(-6px);
+            box-shadow: 0 24px 50px rgba(0,0,0,0.4), 0 0 30px rgba(251,191,36,0.06);
+        }
+
+        .real-img {
+            height: 100px;
+            background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .real-img img {
+            max-height: 60px;
+            max-width: 100%;
+            object-fit: contain;
+            filter: brightness(0.85) saturate(0.9);
+        }
+
+        .real-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+
+        .real-body h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
+        }
+
+        .real-body p {
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.65;
+            flex: 1;
+        }
+
+        .real-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            color: var(--primary);
+            font-weight: 500;
+            margin-top: 16px;
+            letter-spacing: 0.02em;
+            transition: gap 0.2s;
+        }
+
+        .realization-card:hover .real-link { gap: 10px; }
+
+        /* ─── CONTACT ─────────────────────────────────── */
+        .contact-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 60px;
+            backdrop-filter: blur(20px);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .contact-left h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 12px;
+        }
+
+        .contact-left h3 span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .contact-left p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+
+        .contact-items { display: flex; flex-direction: column; gap: 14px; }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 14px;
+            transition: all 0.25s;
+            text-decoration: none;
+        }
+
+        .contact-item:hover {
+            border-color: var(--border);
+            background: rgba(251,191,36,0.04);
+        }
+
+        .contact-icon {
+            width: 40px; height: 40px;
+            border-radius: 11px;
+            background: rgba(251,191,36,0.1);
+            border: 1px solid rgba(251,191,36,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .contact-info { flex: 1; }
+
+        .contact-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 2px;
+        }
+
+        .contact-value {
+            font-size: 0.9rem;
+            color: var(--text);
+            font-weight: 400;
+        }
+
+        .social-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text);
+            font-size: 0.85rem;
+            font-weight: 400;
+            padding: 10px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
+
+        .social-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .social-btn img {
+            width: 20px; height: 20px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        /* ─── FOOTER ──────────────────────────────────── */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 30px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .footer-logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: white;
+        }
+        .footer-logo span { color: var(--primary); }
+
+        /* ─── REVEAL ANIMATION ────────────────────────── */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ─── POPUP ───────────────────────────────────── */
+        .popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(6px);
+        }
+
+        .popup-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            width: 90vw;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .popup-box iframe {
+            width: 100%;
+            height: 80vh;
+            border: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 14px; right: 14px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            width: 34px; height: 34px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .close-btn:hover { background: rgba(251,191,36,0.15); border-color: var(--primary); color: var(--primary); }
+
+        /* ─── RESPONSIVE ──────────────────────────────── */
+        @media (max-width: 1000px) {
+            .hero { flex-direction: column-reverse; text-align: center; padding-top: 110px; }
+            .hero-btns { justify-content: center; }
+            .hero-subtitle { justify-content: center; }
+            .realizations-grid { grid-template-columns: 1fr 1fr; }
+            .project-card-large { grid-template-columns: 1fr; }
+            .project-img-panel { border-right: none; border-bottom: 1px solid var(--border); padding: 28px; }
+            .contact-card { grid-template-columns: 1fr; gap: 40px; }
+        }
+
+        @media (max-width: 700px) {
+            .navbar { padding: 14px 20px; }
+            .nav-links { display: none; }
+            .hero { padding: 100px 20px 60px; }
+            .stats-row { grid-template-columns: 1fr; padding: 0 20px 60px; }
+            .section { padding: 0 20px 70px; }
+            .certs-grid { grid-template-columns: 1fr; }
+            .realizations-grid { grid-template-columns: 1fr; }
+            .contact-card { padding: 32px 24px; }
+            .footer { flex-direction: column; gap: 8px; text-align: center; padding: 24px 20px; }
+        }
+    </style>
 </head>
 
 <body>
-
     <canvas id="network-bg"></canvas>
 
+    <!-- ─── NAVBAR ──────────────────────────────────────── -->
     <nav class="navbar">
-        <div class="nav-container">
-            <h2 class="logo">Lucas<span>Tournay</span></h2>
-            <ul class="nav-links">
-                <li><a href="#about" class="nav-item">Accueil</a></li>
-                <li><a href="#experience" class="nav-item">Parcours</a></li>
-                <li><a href="#choix-cesi" class="nav-item">Mon Projet</a></li>
-                <li><a href="stage.html" class="nav-item">Stages</a></li> <li><a href="#experience" class="nav-item">Parcours</a></li>
-                <li><a href="certifications.html" class="nav-item">Certifications</a></li>
-                <li><a href="#documents" class="nav-item">Réalisations</a></li>
-                <li><a href="competences.html" class="nav-item">Portefeuille de compétence</a></li>
-                <li><a href="#contact" class="nav-item">Contact</a></li>
-            </ul>
-        </div>
+        <h2 class="logo">Lucas<span>Tournay</span></h2>
+        <ul class="nav-links">
+            <li><a href="#about" class="nav-item">Accueil</a></li>
+            <li><a href="#parcours" class="nav-item">Parcours</a></li>
+            <li><a href="#projet" class="nav-item">Projet</a></li>
+            <li><a href="stage.html" class="nav-item">Stages</a></li>
+            <li><a href="certifications.html" class="nav-item">Certifications</a></li>
+            <li><a href="#realisations" class="nav-item">Réalisations</a></li>
+            <li><a href="competences.html" class="nav-item">Compétences</a></li>
+            <li><a href="#contact" class="nav-item">Contact</a></li>
+        </ul>
     </nav>
-    
 
+    <!-- ─── HERO ────────────────────────────────────────── -->
     <header id="about">
-        <div class="hero-wrapper" data-aos="fade-up">
-            <div class="profile-container">
-                <img src="images/photo_lucas.jpg" alt="Lucas Tournay" class="profile-img">
-                <div class="status-badge pulse">Recherche Alternance CESI</div>
-            </div>
-            <div class="intro">
-                <h1 class="glitch" data-text="Tournay Lucas">Tournay Lucas</h1>
-                <p class="subtitle">BTS SIO SISR</p>
-                <p class="description">
-                    Bonjour, je m'appelle <strong>Lucas Tournay</strong>, j'ai 20 ans. Après un <strong>Bac STI2D</strong> option SIN à Fourmies, je me suis spécialisé en informatique.
-                    <br><br>
-                    Actuellement en 2<sup>ème</sup> année de <strong>BTS SIO (SISR)</strong> à Charleville-Mézières, mon objectif est d'intégrer le <strong>CESI de Reims</strong> pour un Bachelor Administrateur Systèmes et Réseaux.
+        <div class="hero">
+            <div class="hero-left">
+                <div class="hero-label">Portfolio — BTS SIO SISR</div>
+                <h1>
+                    <span class="name-first">Tournay</span>
+                    <span class="name-last">Lucas</span>
+                </h1>
+                <div class="hero-subtitle">
+                    <span class="hero-subtitle-text">BTS SIO SISR</span>
+                    <div class="hero-divider"></div>
+                    <span class="hero-subtitle-sub">Charleville-Mézières · 20 ans</span>
+                </div>
+                <p class="hero-desc">
+                    Bonjour ! Après un <strong>Bac STI2D option SIN</strong> à Fourmies, je me suis spécialisé en infrastructure réseau et cybersécurité. Actuellement en 2<sup>ème</sup> année de <strong>BTS SIO (SISR)</strong>, je cherche une alternance pour intégrer le <strong>CESI de Reims</strong> en Bachelor Administrateur Systèmes et Réseaux.
                 </p>
                 <div class="hero-btns">
-                    <a href="cv.html" class="btn-primary" style="text-decoration: none; display: inline-block;">📄 Consulter mon CV</a>
+                    <a href="cv.html" class="btn-primary">📄 Consulter mon CV</a>
+                    <a href="#contact" class="btn-secondary">Me contacter →</a>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="profile-frame">
+                    <div class="profile-ring"></div>
+                    <img src="images/photo_lucas.jpg" alt="Lucas Tournay" class="profile-img">
+                </div>
+                <div class="profile-badge">
+                    <div class="badge-dot"></div>
+                    Recherche Alternance CESI
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- ─── STATS ────────────────────────────────────────── -->
+    <div class="stats-row reveal">
+        <div class="stat-card">
+            <div class="stat-num">2</div>
+            <div class="stat-label">Années de stage</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">6+</div>
+            <div class="stat-label">Réalisations techniques</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">2</div>
+            <div class="stat-label">Certifications obtenues</div>
+        </div>
+    </div>
+
     <main>
-        <section class="section" id="experience" data-aos="fade-right">
-            <h2 class="section-title">Mon Parcours</h2>
-            <div class="timeline">
-                <div class="timeline-item" data-aos="fade-left" data-aos-delay="100">
-                    <div class="timeline-dot"></div>
-                    <span class="date">2022 - 2023</span>
-                    <h4>Baccalauréat STI2D - Option SIN (Systèmes d'Information et Numérique)</h4>
-                    <p>Lycée Camille Claudel - Fourmies</p>
+
+        <!-- ─── PARCOURS ───────────────────────────────── -->
+        <section class="section" id="parcours">
+            <div class="reveal">
+                <div class="section-eyebrow">Formation académique</div>
+                <h2 class="section-title">Mon Parcours</h2>
+            </div>
+
+            <div class="timeline reveal">
+                <div class="timeline-item">
+                    <div class="timeline-date">2022 — 2023</div>
+                    <div class="timeline-card">
+                        <h4>Baccalauréat STI2D — Option SIN</h4>
+                        <p>Systèmes d'Information et Numérique · Lycée Camille Claudel, Fourmies</p>
+                    </div>
                 </div>
-                <div class="timeline-item" data-aos="fade-left" data-aos-delay="200">
-                    <div class="timeline-dot"></div>
-                    <span class="date">2024 - 2026</span>
-                    <h4>BTS SIO option SISR</h4>
-                    <p>Lycée Gaspard Monge - Charleville-Mézières.</p>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">2024 — 2026</div>
+                    <div class="timeline-card">
+                        <h4>BTS SIO — Option SISR</h4>
+                        <p>Solutions d'Infrastructure, Systèmes et Réseaux · Lycée Gaspard Monge, Charleville-Mézières</p>
+                    </div>
                 </div>
-                <div class="timeline-item highlight" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="timeline-dot"></div>
-                    <span class="date">2026 (Objectif)</span>
-                    <h4>Bachelor Administrateur Systèmes et Réseaux</h4>
-                    <p>CESI Reims - Formation en alternance.</p>
+
+                <div class="timeline-item highlight">
+                    <div class="timeline-date">2026 — Objectif</div>
+                    <div class="timeline-card">
+                        <h4>Bachelor Administrateur Systèmes et Réseaux</h4>
+                        <p>CESI Reims — Formation en alternance</p>
+                        <span class="highlight-tag">⭐ Projet en cours</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="section" id="choix-cesi" data-aos="flip-up">
-            <h2 class="section-title">Projet futur</h2>
-            <div class="project-grid">
-                <div class="project-card cesi-special hover-float">
-                    <div class="project-img-container">
-                        <img src="images/CESI-logo.jpg" alt="Logo CESI" class="project-real-img">
-                    </div>
-                    <h4 class="text-left underline">CESI de REIMS Bachelor Administrateur Systèmes et réseaux</h4>
-                    <p class="text-left">
-                        Passionné par l'informatique et plus particulièrement par la gestion de parc et les réseaux, mon ambition est d'intégrer ce Bachelor en alternance.
-                        Ce cursus représente pour moi l'opportunité idéale de transformer mes acquis théoriques et techniques obtenus en BTS SIO SISR en une expertise professionnelle concrète.
-                        Très investi lors de mes expériences chez SI Avesnois Lab, j'ai pu appréhender les enjeux de la maintenance de proximité et du déploiement automatisé (via des solutions comme OPSI). 
-                        Aujourd'hui, je souhaite approfondir ces compétences au sein d'une structure dynamique, afin d'apporter des solutions d'infrastructure fiables et sécurisées tout en poursuivant ma montée en compétences.
+        <!-- ─── PROJET CESI ─────────────────────────────── -->
+        <section class="section" id="projet">
+            <div class="reveal">
+                <div class="section-eyebrow">Projet futur</div>
+                <h2 class="section-title">Objectif CESI Reims</h2>
+            </div>
+
+            <div class="project-card-large reveal">
+                <div class="project-img-panel">
+                    <img src="images/CESI-logo.jpg" alt="Logo CESI">
+                </div>
+                <div class="project-content">
+                    <div class="project-tag">Bachelor — Alternance 2026</div>
+                    <h3>CESI de Reims<br>Administrateur Systèmes et Réseaux</h3>
+                    <p>
+                        Passionné par la gestion d'infrastructure et les réseaux, mon ambition est d'intégrer ce Bachelor en alternance. Ce cursus représente l'opportunité idéale de transformer mes acquis théoriques du BTS SIO SISR en une expertise professionnelle concrète.<br><br>
+                        Très investi lors de mes expériences chez <strong style="color:var(--text);">SI Avesnois Lab</strong>, j'ai appréhendé les enjeux de la maintenance de proximité et du déploiement automatisé via OPSI. Je souhaite approfondir ces compétences au sein d'une structure dynamique, en apportant des solutions d'infrastructure fiables et sécurisées.
                     </p>
                 </div>
             </div>
         </section>
 
-        <section class="section" id="certifications" data-aos="fade-up">
-            <h2 class="section-title">Mes Certifications</h2>
-            <div class="project-grid">
-                <div class="project-card hover-glow">
-                    <div class="project-img-container">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg" alt="Cisco Logo" class="project-real-img">
+        <!-- ─── CERTIFICATIONS ──────────────────────────── -->
+        <section class="section" id="certifications">
+            <div class="reveal">
+                <div class="section-eyebrow">Reconnaissances officielles</div>
+                <h2 class="section-title">Mes Certifications</h2>
+            </div>
+
+            <div class="certs-grid reveal">
+                <div class="cert-card">
+                    <div class="cert-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg" alt="Cisco">
                     </div>
-                    <h4>Cisco Certified Support Technician (CCST) Cybersecurity</h4>
-                    <p>Validation des compétences en sécurité réseau, surveillance des menaces et principes de cyberdéfense.</p>
+                    <div class="cert-body">
+                        <div class="cert-issuer">Cisco</div>
+                        <h4>CCST Cybersecurity</h4>
+                        <p>Validation des compétences en sécurité réseau, surveillance des menaces et principes de cyberdéfense.</p>
+                    </div>
                 </div>
 
-                <div class="project-card hover-glow">
-                    <div class="project-img-container">
-                        <img src="./images/Mooc-logo.jpg" alt="ANSSI Logo" class="project-real-img">
+                <div class="cert-card">
+                    <div class="cert-logo">
+                        <img src="./images/Mooc-logo.jpg" alt="ANSSI">
                     </div>
-                    <h4>SecNumacadémie (ANSSI)</h4>
-                    <p>MOOC complet sur la cybersécurité : sécurité du poste de travail, authentification, et sécurité sur Internet.</p>
+                    <div class="cert-body">
+                        <div class="cert-issuer">ANSSI</div>
+                        <h4>SecNumacadémie</h4>
+                        <p>MOOC complet sur la cybersécurité : sécurité du poste de travail, authentification, et sécurité sur Internet.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="section" id="documents">
-            <h2 class="section-title">Réalisations Techniques</h2>
-            <div class="project-grid">
-                <div class="project-card hover-glow" data-aos="fade-up">
-                    <div class="project-img-container">
-                        <img src="images/pfsense-logo.jpg" alt="Logo pfSense" class="project-real-img">
-                    </div>
-                    <h4>pfSense & Segmentation</h4>
-                    <p>Installation sur Hyper-V et configuration réseau sécurisée.</p>
-                    <a href="docs/Compte%20rendu%20TL.pdf" target="_blank" class="project-link">Voir le dossier →</a>
-                </div>
+        <!-- ─── RÉALISATIONS ────────────────────────────── -->
+        <section class="section" id="realisations">
+            <div class="reveal">
+                <div class="section-eyebrow">Travaux pratiques</div>
+                <h2 class="section-title">Réalisations Techniques</h2>
+            </div>
 
-                <div class="project-card hover-glow" data-aos="fade-up" data-aos-delay="100">
-                    <div class="project-img-container">
-                        <img src="images/wireguard-logo.jpg" alt="Logo WireGuard" class="project-real-img">
+            <div class="realizations-grid reveal">
+                <a href="docs/Compte%20rendu%20TL.pdf" target="_blank" class="realization-card">
+                    <div class="real-img">
+                        <img src="images/pfsense-logo.jpg" alt="pfSense">
                     </div>
-                    <h4>Tunneling VPN</h4>
-                    <p>Mise en place de solutions d'accès distants sécurisés via WireGuard.</p>
-                    <a href="docs/Compte%20rendu%20VPN%20TL.pdf" target="_blank" class="project-link">Voir le dossier →</a>
-                </div>
+                    <div class="real-body">
+                        <h4>pfSense & Segmentation</h4>
+                        <p>Installation sur Hyper-V et configuration réseau sécurisée avec règles de filtrage avancées.</p>
+                        <span class="real-link">Voir le dossier →</span>
+                    </div>
+                </a>
 
-                <div class="project-card hover-glow" data-aos="fade-up" data-aos-delay="200">
-                    <div class="project-img-container">
-                        <img src="images/AD-logo.jpg" alt="Logo Active Directory" class="project-real-img">
+                <a href="docs/Compte%20rendu%20VPN%20TL.pdf" target="_blank" class="realization-card">
+                    <div class="real-img">
+                        <img src="images/wireguard-logo.jpg" alt="WireGuard">
                     </div>
-                    <h4>Active Directory</h4>
-                    <p>Gestion des rôles, des utilisateurs et des stratégies GPO.</p>
-                    <a href="docs/Compte%20rendu%20TP%20AD.pdf" target="_blank" class="project-link">Voir le dossier →</a>
-                </div>
+                    <div class="real-body">
+                        <h4>Tunneling VPN</h4>
+                        <p>Mise en place de solutions d'accès distants sécurisés via WireGuard.</p>
+                        <span class="real-link">Voir le dossier →</span>
+                    </div>
+                </a>
 
-                <div class="project-card hover-glow" data-aos="fade-up" data-aos-delay="300">
-                    <div class="project-img-container">
-                        <img src="images/DNS-logo.jpg" alt="Logo DNS" class="project-real-img">
+                <a href="docs/Compte%20rendu%20TP%20AD.pdf" target="_blank" class="realization-card">
+                    <div class="real-img">
+                        <img src="images/AD-logo.jpg" alt="Active Directory">
                     </div>
-                    <h4>Infrastructure DNS</h4>
-                    <p>Configuration et résolution de noms de domaines.</p>
-                    <a href="docs/Compte%20rendu%20DNS%20TL%20PDF.pdf" target="_blank" class="project-link">Voir le dossier →</a>
-                </div>
+                    <div class="real-body">
+                        <h4>Active Directory</h4>
+                        <p>Gestion des rôles, des utilisateurs et des stratégies GPO en environnement Windows Server.</p>
+                        <span class="real-link">Voir le dossier →</span>
+                    </div>
+                </a>
 
-                <div class="project-card hover-glow" data-aos="fade-up" data-aos-delay="400">
-                    <div class="project-img-container">
-                        <img src="images/Zabbix-logo.jpg" alt="Logo Zabbix" class="project-real-img">
+                <a href="docs/Compte%20rendu%20DNS%20TL%20PDF.pdf" target="_blank" class="realization-card">
+                    <div class="real-img">
+                        <img src="images/DNS-logo.jpg" alt="DNS">
                     </div>
-                    <h4>Supervision Zabbix</h4>
-                    <p>Monitoring en temps réel des serveurs et équipements réseau.</p>
-                    <a href="docs/compte%20rendu%20Zabbix%20TL.pdf" target="_blank" class="project-link">Voir le dossier →</a>
-                </div>
+                    <div class="real-body">
+                        <h4>Infrastructure DNS</h4>
+                        <p>Configuration et résolution de noms de domaines avec zones directes et inverses.</p>
+                        <span class="real-link">Voir le dossier →</span>
+                    </div>
+                </a>
 
-                <div class="project-card hover-glow" data-aos="fade-up" data-aos-delay="500">
-                    <div class="project-img-container">
-                        <img src="images/Mail-logo.jpg" alt="Logo Serveur Mail" class="project-real-img">
+                <a href="docs/compte%20rendu%20Zabbix%20TL.pdf" target="_blank" class="realization-card">
+                    <div class="real-img">
+                        <img src="images/Zabbix-logo.jpg" alt="Zabbix">
                     </div>
-                    <h4>Serveur Mail</h4>
-                    <p>Déploiement et configuration d'une solution de messagerie.</p>
-                    <a href="docs/TP%20MAIL%20Tournay%20Lucas.pdf" target="_blank" class="project-link">Voir le dossier →</a>
-                </div>
+                    <div class="real-body">
+                        <h4>Supervision Zabbix</h4>
+                        <p>Monitoring en temps réel des serveurs et équipements réseau avec alerting.</p>
+                        <span class="real-link">Voir le dossier →</span>
+                    </div>
+                </a>
+
+                <a href="docs/TP%20MAIL%20Tournay%20Lucas.pdf" target="_blank" class="realization-card">
+                    <div class="real-img">
+                        <img src="images/Mail-logo.jpg" alt="Serveur Mail">
+                    </div>
+                    <div class="real-body">
+                        <h4>Serveur Mail</h4>
+                        <p>Déploiement et configuration d'une solution de messagerie complète et sécurisée.</p>
+                        <span class="real-link">Voir le dossier →</span>
+                    </div>
+                </a>
             </div>
         </section>
+
     </main>
 
-    <section class="section" id="contact" data-aos="fade-up">
-        <h2 class="section-title">Contact</h2>
-        <div class="contact-wrapper">
-            <div class="contact-headline">
-                <h4>Lucas Tournay — En recherche d'alternance</h4>
-            </div>
-            
-            <div class="contact-details">
-                <div class="contact-item">
-                    <span class="icon">📞</span>
-                    <p><strong>Téléphone :</strong> <a href="tel:+33788371217">07 88 37 12 17</a></p>
-                </div>
-                <div class="contact-item">
-                    <span class="icon">✉️</span>
-                    <p><strong>Mail :</strong> <a href="mailto:lucas.tournay59@gmail.com">lucas.tournay59@gmail.com</a></p>
-                </div>
-                <div class="contact-item">
-                    <span class="icon">📍</span>
-                    <p><strong>Adresse :</strong> 1ter rue de Rocquigny, 59610 Féron</p>
+    <!-- ─── CONTACT ──────────────────────────────────────── -->
+    <section class="section" id="contact">
+        <div class="reveal">
+            <div class="section-eyebrow">Disponible pour échanger</div>
+            <h2 class="section-title">Contact</h2>
+        </div>
+
+        <div class="contact-card reveal">
+            <div class="contact-left">
+                <h3>Lucas Tournay —<br><span>En recherche d'alternance</span></h3>
+                <p>N'hésitez pas à me contacter pour discuter d'une opportunité d'alternance, d'un projet ou simplement pour échanger sur les métiers de l'infrastructure réseau.</p>
+                <div class="social-row">
+                    <a href="https://www.linkedin.com/in/lucas-tournay-2a69162ba/" target="_blank" class="social-btn">
+                        <img src="images/linkedin-logo-linkedin-icon-transparent-free-png.webp" alt="LinkedIn">
+                        LinkedIn
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=100072894137629" target="_blank" class="social-btn">
+                        <img src="images/Facebook-logo.jpg" alt="Facebook">
+                        Facebook
+                    </a>
                 </div>
             </div>
 
-            <div class="contact-social">
-                <h1>Me contacter :</h1>
-                <a href="https://www.linkedin.com/in/lucas-tournay-2a69162ba/" class="social-link linkedin-link" target="_blank">
-                    <img src="images/linkedin-logo-linkedin-icon-transparent-free-png.webp" alt="LinkedIn" class="social-icon">
+            <div class="contact-items">
+                <a href="tel:+33788371217" class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-info">
+                        <div class="contact-label">Téléphone</div>
+                        <div class="contact-value">07 88 37 12 17</div>
+                    </div>
                 </a>
-                <a href="https://www.facebook.com/profile.php?id=100072894137629&locale=fr_FR" class="social-link facebook-link" target="_blank">
-                    <img src="images/Facebook-logo.jpg" alt="Facebook" class="social-icon">
+                <a href="mailto:lucas.tournay59@gmail.com" class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-info">
+                        <div class="contact-label">Email</div>
+                        <div class="contact-value">lucas.tournay59@gmail.com</div>
+                    </div>
                 </a>
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-info">
+                        <div class="contact-label">Adresse</div>
+                        <div class="contact-value">1ter rue de Rocquigny, 59610 Féron</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <footer class="footer-simple">
-        <div class="footer-content">
-            <p>© 2026 Lucas Tournay. Tous droits réservés.</p>
-        </div>
+    <!-- ─── FOOTER ───────────────────────────────────────── -->
+    <footer class="footer">
+        <div class="footer-logo">Lucas<span>Tournay</span></div>
+        <div>© 2026 · BTS SIO SISR · Tous droits réservés</div>
     </footer>
 
+    <!-- ─── POPUP CV ──────────────────────────────────────── -->
     <div class="popup" id="popup" onclick="closePopup()">
-        <div class="popup-box scale-in" onclick="event.stopPropagation()">
-            <button class="close-btn" onclick="closePopup()">&times;</button>
+        <div class="popup-box" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closePopup()">✕</button>
             <iframe src="docs/CV Alternance bts sio.jpg"></iframe>
         </div>
     </div>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 1000, once: true });
-
-        // Canvas Network Background
+        // ─── CANVAS NETWORK ────────────────────────────────
         const canvas = document.getElementById("network-bg");
         const ctx = canvas.getContext("2d");
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.onresize = resize; resize();
 
-        let nodes = [];
-        for (let i = 0; i < 70; i++) {
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.onresize = resize;
+        resize();
+
+        const nodes = [];
+        for (let i = 0; i < 80; i++) {
             nodes.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.6,
-                vy: (Math.random() - 0.5) * 0.6
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                r: Math.random() * 1.5 + 1
             });
         }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             nodes.forEach((node, i) => {
-                node.x += node.vx; node.y += node.vy;
+                node.x += node.vx;
+                node.y += node.vy;
                 if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
                 if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
-                ctx.beginPath(); ctx.arc(node.x, node.y, 2, 0, Math.PI * 2); ctx.fillStyle = "rgba(56, 189, 248, 0.5)"; ctx.fill();
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(251, 191, 36, 0.35)";
+                ctx.fill();
                 for (let j = i + 1; j < nodes.length; j++) {
-                    let dx = node.x - nodes[j].x, dy = node.y - nodes[j].y, dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 150) {
-                        ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(nodes[j].x, nodes[j].y);
-                        ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist/150})`; ctx.lineWidth = 0.5; ctx.stroke();
+                    const dx = node.x - nodes[j].x;
+                    const dy = node.y - nodes[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 140) {
+                        ctx.beginPath();
+                        ctx.moveTo(node.x, node.y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(251, 191, 36, ${(1 - dist / 140) * 0.18})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
                     }
                 }
             });
@@ -262,6 +1279,18 @@
         }
         animate();
 
+        // ─── SCROLL REVEAL ─────────────────────────────────
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.08 });
+        reveals.forEach(el => observer.observe(el));
+
+        // ─── POPUP ─────────────────────────────────────────
         function openPopup() { document.getElementById("popup").style.display = "flex"; }
         function closePopup() { document.getElementById("popup").style.display = "none"; }
     </script>
